@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import * as Linking from 'expo-linking';
+import { Platform } from 'react-native';
 import { User, Contact } from '../types';
 import { bpOf, gluOf, fmtDateTime } from '../calc';
 
@@ -7,6 +8,16 @@ export type Coords = { lat: number; lng: number } | null;
 
 export async function getCoords(): Promise<Coords> {
   try {
+    if (Platform.OS === 'web') {
+      return await new Promise<Coords>((resolve) => {
+        if (!('geolocation' in navigator)) return resolve(null);
+        navigator.geolocation.getCurrentPosition(
+          (p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }),
+          () => resolve(null),
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      });
+    }
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') return null;
     const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });

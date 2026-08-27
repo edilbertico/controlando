@@ -1,24 +1,31 @@
 import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native';
 import { User, Med } from '../types';
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+const IS_WEB = Platform.OS === 'web';
+
+if (!IS_WEB) {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+}
 
 export const CATEGORY_MED = 'MED_REMINDER';
 
 export async function requestNotifPermission(): Promise<boolean> {
+  if (IS_WEB) return false;
   const { status } = await Notifications.requestPermissionsAsync();
   return status === 'granted';
 }
 
 export async function configureMedCategory() {
+  if (IS_WEB) return;
   await Notifications.setNotificationCategoryAsync(CATEGORY_MED, [
     { identifier: 'TOMAR', buttonTitle: 'Tomar', options: { opensAppToForeground: false } },
     { identifier: 'POSPONER', buttonTitle: 'Posponer 15 min', options: { opensAppToForeground: false } },
@@ -31,6 +38,7 @@ function timeToTrigger(t: string): Notifications.NotificationTriggerInput {
 }
 
 export async function scheduleAllMeds(user: User) {
+  if (IS_WEB) return;
   await cancelAllMeds();
   for (const med of user.meds) {
     for (const t of med.schedule) {
@@ -48,6 +56,7 @@ export async function scheduleAllMeds(user: User) {
 }
 
 export async function cancelAllMeds() {
+  if (IS_WEB) return;
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
   for (const n of scheduled) {
     if (n.content.data?.type === 'med') await Notifications.cancelScheduledNotificationAsync(n.identifier);
@@ -55,6 +64,7 @@ export async function cancelAllMeds() {
 }
 
 export async function scheduleSnooze(medId: string, medName: string, inMin = 15) {
+  if (IS_WEB) return;
   await Notifications.scheduleNotificationAsync({
     content: {
       title: `💊 Recordatorio pospuesto`,

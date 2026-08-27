@@ -3,6 +3,7 @@
     "name": "Cundinamarca te Cuida",
     "slug": "cundinamarca-te-cuida",
     "version": "1.0.0",
+    "platforms": ["ios", "android", "web"],
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,

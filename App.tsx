@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
+import { Platform } from 'react-native';
 import { AppProvider, useApp } from './src/context';
 import { useTheme } from './src/useTheme';
 import Inicio from './src/screens/Inicio';
@@ -54,6 +55,7 @@ const Listener = () => {
     else cancelAllMeds();
   }, [activeUser]);
   useEffect(() => {
+    if (Platform.OS === 'web') return;
     const sub = Notifications.addNotificationResponseReceivedListener((resp) => {
       const medId = resp.notification.request.content.data?.medId as string;
       if (!medId) return;

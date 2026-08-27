@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { Platform } from 'react-native';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet, Alert, Dimensions } from 'react-native';
 import { LineChart, BarChart } from 'react-native-chart-kit';
 import { useApp } from '../context';
@@ -44,6 +45,10 @@ export default function Analisis() {
   };
 
   const share = async () => {
+    if (Platform.OS === 'web') {
+      Alert.alert('Disponible en la app móvil', 'La exportación de informes funciona en Android/iOS.');
+      return;
+    }
     try {
       const uri = FileSystem.documentDirectory + 'informe.txt';
       await FileSystem.writeAsStringAsync(uri, report, { encoding: FileSystem.EncodingType.UTF8 });
@@ -54,6 +59,10 @@ export default function Analisis() {
   };
 
   const exportPdf = async () => {
+    if (Platform.OS === 'web') {
+      Alert.alert('Disponible en la app móvil', 'El PDF se genera en Android/iOS.');
+      return;
+    }
     try {
       let chartsHtml = '';
       try {
