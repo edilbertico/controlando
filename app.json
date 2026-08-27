@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Cundinamarca te Cuida",
+    "slug": "cundinamarca-te-cuida",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": false,
+    "scheme": "cundinamarca",
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#14315c"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Usa tu ubicación para enviar tu posición en el botón SOS."
+        }
+      ]
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCallNumberDialing": true
+      }
+    },
+    "android": {
+      "package": "co.gov.cundinamarca.tecuidapp",
+      "permissions": [
+        "USE_FULL_SCREEN_INTENT",
+        "POST_NOTIFICATIONS",
+        "READ_PHONE_STATE",
+        "CALL_PHONE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  }
+}
